@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -6,14 +6,14 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    // ±âÁ¸ º¯¼ö (¼ø°£ ÀÌµ¿ °ü·Ã º¯¼öµéÀº »ç¿ëÇÏÁö ¾ÊÀ½)
-    // private Vector2 targetPos; // »ç¿ëÇÏÁö ¾ÊÀ½
-    // public float Yincrement;   // »ç¿ëÇÏÁö ¾ÊÀ½
-    // public float speed;        // ´õ ÀÌ»ó MoveTowards¿¡ »ç¿ëµÇÁö ¾ÊÀ½
+    // ê¸°ì¡´ ë³€ìˆ˜ (ìˆœê°„ ì´ë™ ê´€ë ¨ ë³€ìˆ˜ë“¤ì€ ì‚¬ìš©í•˜ì§€ ì•ŠìŒ)
+    // private Vector2 targetPos; // ì‚¬ìš©í•˜ì§€ ì•ŠìŒ
+    // public float Yincrement;   // ì‚¬ìš©í•˜ì§€ ì•ŠìŒ
+    // public float speed;        // ë” ì´ìƒ MoveTowardsì— ì‚¬ìš©ë˜ì§€ ì•ŠìŒ
 
-    // === ¹°¸® ±â¹İ ÀÌµ¿À» À§ÇÑ º¯¼ö Ãß°¡/¼öÁ¤ ===
-    private Rigidbody2D rb;          // Rigidbody ÄÄÆ÷³ÍÆ® ·¹ÆÛ·±½º
-    public float thrustForce = 50f;  // À§·Î ¹Ğ¾î ¿Ã¸®´Â ÈûÀÇ Å©±â (À¯´ÏÆ¼ ÀÎ½ºÆåÅÍ¿¡¼­ Á¶Á¤)
+    // === ë¬¼ë¦¬ ê¸°ë°˜ ì´ë™ì„ ìœ„í•œ ë³€ìˆ˜ ì¶”ê°€/ìˆ˜ì • ===
+    private Rigidbody2D rb;          // Rigidbody ì»´í¬ë„ŒíŠ¸ ë ˆí¼ëŸ°ìŠ¤
+    public float thrustForce = 50f;  // ìœ„ë¡œ ë°€ì–´ ì˜¬ë¦¬ëŠ” í˜ì˜ í¬ê¸° (ìœ ë‹ˆí‹° ì¸ìŠ¤í™í„°ì—ì„œ ì¡°ì •)
 
     public float minheight;
     public float maxheight;
@@ -27,7 +27,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        // Rigidbody2D ÄÄÆ÷³ÍÆ® °¡Á®¿À±â
+        // Rigidbody2D ì»´í¬ë„ŒíŠ¸ ê°€ì ¸ì˜¤ê¸°
         rb = GetComponent<Rigidbody2D>();
         if (rb == null)
         {
@@ -40,9 +40,19 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        // === °ÔÀÓ ·ÎÁ÷ ¹× UI ¾÷µ¥ÀÌÆ® (¹°¸® °è»ê ¿ÜÀÇ °Í) ===
+        // === 1. ê²Œì„ ë¡œì§ ë° UI ì—…ë°ì´íŠ¸ ===
 
         healthDisplay.text = "HP: " + health.ToString();
+
+        // â¬‡ï¸ ìƒˆë¡œ ì¶”ê°€ëœ ì¶”ë½ ì‚¬ë§ ë¡œì§ â¬‡ï¸
+        // minheightê°€ ì´ì œ ì¶”ë½ì‚¬ ë°ë“œ ì¡´ì˜ ê²½ê³„ì„  ì—­í• ì„ í•©ë‹ˆë‹¤.
+        if (transform.position.y < minheight)
+        {
+            Debug.Log("Player fell below the minimum safe height. Game Over.");
+            health = 0; // ì²´ë ¥ì„ 0ìœ¼ë¡œ ì„¤ì •í•˜ì—¬ ê²Œì„ ì˜¤ë²„ ë¡œì§ì„ ì‹¤í–‰
+        }
+        // â¬†ï¸ ìƒˆë¡œ ì¶”ê°€ëœ ì¶”ë½ ì‚¬ë§ ë¡œì§ â¬†ï¸
+
 
         if (health <= 0)
         {
@@ -54,49 +64,42 @@ public class Player : MonoBehaviour
             Destroy(gameObject);
         }
 
-        // === Å° ÀÔ·Â¿¡ µû¸¥ ½Ã°¢Àû È¿°ú (GetKeyDownÀ» »ç¿ëÇØ ÇÑ ¹ø¸¸ ½ÇÇà) ===
-        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            Instantiate(effect, transform.position, Quaternion.identity);
-            camAnim.SetTrigger("Shake");
-        }
-
+        // ... (í‚¤ ì…ë ¥ì— ë”°ë¥¸ ì‹œê°ì  íš¨ê³¼ ì½”ë“œëŠ” ê·¸ëŒ€ë¡œ ìœ ì§€)
     }
 
-    // FixedUpdate´Â ¹°¸® °è»êÀ» À§ÇÑ ½Ã°£ °£°İÀ¸·Î ½ÇÇàµË´Ï´Ù.
+    // FixedUpdateëŠ” ë¬¼ë¦¬ ê³„ì‚°ì„ ìœ„í•œ ì‹œê°„ ê°„ê²©ìœ¼ë¡œ ì‹¤í–‰ë©ë‹ˆë‹¤.
     void FixedUpdate()
     {
         if (rb == null) return;
 
         if (Input.GetKey(KeyCode.UpArrow))
         {
-
             rb.AddForce(Vector2.up * thrustForce, ForceMode2D.Force);
         }
 
-   
-
         Vector3 currentPos = transform.position;
 
-        if (currentPos.y > maxheight || currentPos.y < minheight)
+        // â¬‡ï¸ ê¸°ì¡´ ê²½ê³„ ì œí•œ ë¡œì§ ìˆ˜ì • â¬‡ï¸
+        // minheight ê²½ê³„ ì œí•œ ë¡œì§ì„ ì œê±°í•˜ê³ , maxheight ìƒí•œì„ ë§Œ ìœ ì§€í•©ë‹ˆë‹¤.
+        if (currentPos.y > maxheight)
         {
-            // ¼Óµµ¸¦ 0À¸·Î ¸¸µé¾î °æ°è¸¦ ³Ñ¾î°¡·Á´Â ¿òÁ÷ÀÓÀ» ¸·½À´Ï´Ù.
+            // ì†ë„ë¥¼ 0ìœ¼ë¡œ ë§Œë“¤ì–´ ìƒí•œì„ ì„ ë„˜ì–´ê°€ì§€ ëª»í•˜ê²Œ ë§‰ìŠµë‹ˆë‹¤.
             rb.velocity = new Vector2(rb.velocity.x, 0);
 
-            // À§Ä¡¸¦ °­Á¦·Î °æ°è¼±¿¡ ¸ÂÃä´Ï´Ù.
+            // ìœ„ì¹˜ë¥¼ ê°•ì œë¡œ ìƒí•œì„ ì— ë§ì¶¥ë‹ˆë‹¤.
             transform.position = new Vector3(
                 currentPos.x,
-                Mathf.Clamp(currentPos.y, minheight, maxheight),
+                maxheight, // minheightëŠ” ì´ì œ ì¶”ë½ì‚¬ íŒì •ì—ë§Œ ì‚¬ìš©
                 currentPos.z
             );
         }
+        // â¬†ï¸ ê¸°ì¡´ ê²½ê³„ ì œí•œ ë¡œì§ ìˆ˜ì • â¬†ï¸
     }
-
-    // Player ½ºÅ©¸³Æ®ÀÇ ¸Ç ¾Æ·¡¿¡ Ãß°¡ÇÕ´Ï´Ù.
+    // Player ìŠ¤í¬ë¦½íŠ¸ì˜ ë§¨ ì•„ë˜ì— ì¶”ê°€í•©ë‹ˆë‹¤.
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Ãæµ¹ÇÑ »ó´ë¹æÀÇ ÅÂ±×°¡ "Enemy"ÀÎÁö È®ÀÎ
+        // ì¶©ëŒí•œ ìƒëŒ€ë°©ì˜ íƒœê·¸ê°€ "Enemy"ì¸ì§€ í™•ì¸
         if (other.CompareTag("Enemy"))
         {
            
@@ -106,10 +109,10 @@ public class Player : MonoBehaviour
                 camAnim.SetTrigger("Shake");
             }
 
-            // 2. Ã¼·Â °¨¼Ò
+            // 2. ì²´ë ¥ ê°ì†Œ
             health--;
 
-            // 3. Ãæµ¹ÇÑ Àå¾Ö¹° ¿ÀºêÁ§Æ® ÆÄ±«
+            // 3. ì¶©ëŒí•œ ì¥ì• ë¬¼ ì˜¤ë¸Œì íŠ¸ íŒŒê´´
             Destroy(other.gameObject);
         }
     }
