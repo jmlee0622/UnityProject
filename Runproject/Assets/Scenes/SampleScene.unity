@@ -243,10 +243,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1179105d70baaa438c2a32d5ac615f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Yincrement: 5
-  speed: 100
-  minheight: -5
-  maxheight: 5
+  thrustForce: 100
+  minheight: -8
+  maxheight: 8
   health: 3
   effect: {fileID: 8494888614240188348, guid: 94d1cf824cc797644bdf1d36b05eb3a5, type: 3}
   camAnim: {fileID: 519420033}
@@ -260,14 +259,14 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 121084022}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 3
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -277,7 +276,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!61 &121084028
 BoxCollider2D:
@@ -3036,7 +3035,7 @@ GameObject:
   - component: {fileID: 1735870256}
   m_Layer: 0
   m_Name: Spawner
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
