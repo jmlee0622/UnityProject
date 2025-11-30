@@ -244,7 +244,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   thrustForce: 100
-  minheight: -5
+  minheight: -6
   maxheight: 8
   health: 3
   effect: {fileID: 8494888614240188348, guid: 94d1cf824cc797644bdf1d36b05eb3a5, type: 3}
